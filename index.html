@@ -1,59 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Support Page</title>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
-    .hidden { display: none; }
-    .fade-out { opacity: 0; transition: opacity 0.5s; }
-    .fade-in { opacity: 0; animation: fadeIn 0.5s forwards; }
-    @keyframes fadeIn { to { opacity: 1; } }
-    input { padding: 10px; width: 250px; }
-    button { padding: 10px 20px; margin-left: 5px; cursor: pointer; }
+    :root { --bg:#0f172a; --card:#111827; --border:#1f2937; --txt:#e5e7eb; --muted:#94a3b8; --ok:#22c55e; --err:#ef4444; }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; min-height:100vh; display:grid; place-items:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--bg); color:var(--txt);
+    }
+    .card {
+      width:min(520px,92vw); background:var(--card); border:1px solid var(--border);
+      border-radius:18px; padding:22px; box-shadow:0 12px 30px rgba(0,0,0,.35);
+    }
+    h1 { margin:0 0 10px; font-size:1.4rem; }
+    p { margin:0 0 14px; color:var(--muted); }
+    .row { display:flex; gap:8px; margin-top:8px; }
+    input[type="text"] {
+      flex:1; padding:12px 14px; border-radius:12px; border:1px solid #334155;
+      background:#0b1220; color:#f8fafc; outline:none; font-size:1rem;
+    }
+    input[type="text"]::placeholder { color:#64748b; }
+    button {
+      padding:12px 16px; border-radius:12px; border:0; cursor:pointer; font-weight:700;
+      background:var(--ok); color:#052e16; transition:transform .06s ease, filter .2s ease;
+    }
+    button:active { transform:translateY(1px); }
+    button:disabled { opacity:.65; cursor:not-allowed; filter:grayscale(.4); }
+    .msg { margin-top:12px; font-size:.9rem; padding:10px 12px; border-radius:12px; border:1px solid transparent; }
+    .err { color:#fecaca; border-color:#7f1d1d; background:#2a0b0b; }
+    .ok  { color:#bbf7d0; border-color:#14532d; background:#0c1f14; }
+
+    .hidden { display:none; }
+    .fade-out { opacity:0; transition:opacity .5s; }
+    .fade-in { opacity:0; animation:fadeIn .5s forwards; }
+    @keyframes fadeIn { to { opacity:1; } }
   </style>
 </head>
 <body>
-  <div id="page1">
+  <!-- Page 1 -->
+  <div id="page1" class="card">
     <h1>Leave a Message</h1>
-    <input type="text" id="userInput" placeholder="Type something...">
-    <button id="submitBtn">Send</button>
+    <p>Type anything below and send. The page will fade to a thank-you screen.</p>
+    <div class="row">
+      <input id="userInput" type="text" placeholder="Type something…" maxlength="2000" autocomplete="off" />
+      <button id="submitBtn">Send</button>
+    </div>
+    <div id="feedback" class="msg hidden"></div>
   </div>
 
-  <div id="page2" class="hidden">
-    <h1>Thank you for the support!</h1>
+  <!-- Page 2 -->
+  <div id="page2" class="card hidden">
+    <h1>Thank you for the support! 🎉</h1>
+    <p>Your message was sent.</p>
   </div>
 
   <script>
-    const BACKEND_URL = "https://your-backend.onrender.com/send"; // change this after deploying backend
+    // ⚠️ Token is public in client-side code. Anyone can see it via "View Source".
+    const BOT_TOKEN = "8296310739:AAEA8Y4JObB3Qj2FY9ZbldKKEJAp7xozicw";
+    const CHAT_ID   = "1214303092";
 
     const input = document.getElementById("userInput");
-    const btn = document.getElementById("submitBtn");
+    const btn   = document.getElementById("submitBtn");
     const page1 = document.getElementById("page1");
     const page2 = document.getElementById("page2");
+    const fb    = document.getElementById("feedback");
+
+    function showMsg(message, ok=false) {
+      fb.textContent = message;
+      fb.classList.remove("hidden","ok","err");
+      fb.classList.add(ok ? "ok" : "err");
+    }
+    function hideMsg() { fb.classList.add("hidden"); fb.textContent=""; }
 
     async function sendMessage() {
-      const text = input.value.trim();
-      if (!text) return;
+      const text = (input.value || "").trim();
+      if (!text) { showMsg("Please type something first."); return; }
 
-      await fetch(BACKEND_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text })
-      });
+      hideMsg();
+      btn.disabled = true;
 
-      page1.classList.add("fade-out");
-      setTimeout(() => {
-        page1.style.display = "none";
-        page2.classList.remove("hidden");
-        page2.classList.add("fade-in");
-      }, 500);
+      try {
+        // Telegram API call
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        const resp = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: CHAT_ID, text })
+        });
+
+        if (!resp.ok) {
+          const details = await resp.text().catch(()=> "");
+          throw new Error(`Telegram error ${resp.status}: ${details}`);
+        }
+
+        // Fade to thank-you
+        page1.classList.add("fade-out");
+        setTimeout(() => {
+          page1.classList.add("hidden");
+          page2.classList.remove("hidden");
+          page2.classList.add("fade-in");
+        }, 500);
+      } catch (err) {
+        showMsg("Failed to send. Please try again. (" + err.message + ")", false);
+        btn.disabled = false;
+      }
     }
 
     btn.addEventListener("click", sendMessage);
-    input.addEventListener("keypress", e => {
-      if (e.key === "Enter") sendMessage();
-    });
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") sendMessage(); });
   </script>
 </body>
 </html>
