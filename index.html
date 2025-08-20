@@ -2,58 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Support Page</title>
+  <title>Support Form</title>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
-    .hidden { display: none; }
-    .fade-out { opacity: 0; transition: opacity 0.5s; }
-    .fade-in { opacity: 0; animation: fadeIn 0.5s forwards; }
-    @keyframes fadeIn { to { opacity: 1; } }
-    input { padding: 10px; width: 250px; }
-    button { padding: 10px 20px; margin-left: 5px; cursor: pointer; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f4f9;
+      padding: 50px;
+    }
+    #form-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: inline-block;
+    }
+    input[type="text"] {
+      width: 300px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #0077ff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+    }
+    #thankyou {
+      display: none;
+      font-size: 20px;
+      color: green;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
-  <div id="page1">
-    <h1>Leave a Message</h1>
-    <input type="text" id="userInput" placeholder="Type something...">
-    <button id="submitBtn">Send</button>
-  </div>
-
-  <div id="page2" class="hidden">
-    <h1>Thank you for the support!</h1>
+  <div id="form-container">
+    <h2>Type a message</h2>
+    <input type="text" id="messageInput" placeholder="Enter your message">
+    <br>
+    <button onclick="sendMessage()">Send</button>
+    <p id="thankyou">✅ Thank you for the support!</p>
   </div>
 
   <script>
-    const input = document.getElementById("userInput");
-    const btn = document.getElementById("submitBtn");
-    const page1 = document.getElementById("page1");
-    const page2 = document.getElementById("page2");
-
     async function sendMessage() {
-      const text = input.value.trim();
-      if (!text) return;
+      const message = document.getElementById("messageInput").value;
+      if (!message.trim()) return alert("Please enter a message");
 
-      // Call backend API (hosted on Vercel)
-      await fetch("https://YOUR-VERCEL-APP.vercel.app/api/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text })
-      });
+      try {
+        await fetch("https://YOUR-VERCEL-APP.vercel.app/api/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
 
-      // Page transition
-      page1.classList.add("fade-out");
-      setTimeout(() => {
-        page1.style.display = "none";
-        page2.classList.remove("hidden");
-        page2.classList.add("fade-in");
-      }, 500);
+        document.getElementById("messageInput").value = "";
+        document.getElementById("thankyou").style.display = "block";
+      } catch (err) {
+        alert("Failed to send message");
+      }
     }
-
-    btn.addEventListener("click", sendMessage);
-    input.addEventListener("keypress", e => {
-      if (e.key === "Enter") sendMessage();
-    });
   </script>
 </body>
 </html>
