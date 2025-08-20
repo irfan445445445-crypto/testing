@@ -5,22 +5,28 @@ export default async function handler(req, res) {
 
   const { message } = req.body;
 
+  if (!message) {
+    return res.status(400).json({ error: "Message is required" });
+  }
+
   const BOT_TOKEN = process.env.BOT_TOKEN;
   const CHAT_ID = process.env.CHAT_ID;
 
-  try {
-    const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
-    const response = await fetch(telegramUrl, {
+  try {
+    const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: CHAT_ID, text: message })
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: message,
+      }),
     });
 
-    if (!response.ok) throw new Error("Telegram API error");
-
-    res.status(200).json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const data = await response.json();
+    return res.status(200).json({ success: true, data });
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to send message" });
   }
 }
