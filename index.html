@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Support Page</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
+    .hidden { display: none; }
+    .fade-out { opacity: 0; transition: opacity 0.5s; }
+    .fade-in { opacity: 0; animation: fadeIn 0.5s forwards; }
+    @keyframes fadeIn { to { opacity: 1; } }
+    input { padding: 10px; width: 250px; }
+    button { padding: 10px 20px; margin-left: 5px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div id="page1">
+    <h1>Leave a Message</h1>
+    <input type="text" id="userInput" placeholder="Type something...">
+    <button id="submitBtn">Send</button>
+  </div>
+
+  <div id="page2" class="hidden">
+    <h1>Thank you for the support!</h1>
+  </div>
+
+  <script>
+    const BACKEND_URL = "https://your-backend.onrender.com/send"; // change this after deploying backend
+
+    const input = document.getElementById("userInput");
+    const btn = document.getElementById("submitBtn");
+    const page1 = document.getElementById("page1");
+    const page2 = document.getElementById("page2");
+
+    async function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      await fetch(BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
+      });
+
+      page1.classList.add("fade-out");
+      setTimeout(() => {
+        page1.style.display = "none";
+        page2.classList.remove("hidden");
+        page2.classList.add("fade-in");
+      }, 500);
+    }
+
+    btn.addEventListener("click", sendMessage);
+    input.addEventListener("keypress", e => {
+      if (e.key === "Enter") sendMessage();
+    });
+  </script>
+</body>
+</html>
