@@ -2,71 +2,95 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Support Form</title>
+  <title>Send Message</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: opacity 1s ease;
+    }
+    #page1, #page2 {
       text-align: center;
-      background: #f4f4f9;
-      padding: 50px;
     }
-    #form-container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      display: inline-block;
-    }
-    input[type="text"] {
-      width: 300px;
+    #textbox {
       padding: 10px;
+      width: 300px;
       font-size: 16px;
+      margin-bottom: 15px;
     }
-    button {
+    #sendBtn {
       padding: 10px 20px;
-      margin-top: 10px;
       font-size: 16px;
       cursor: pointer;
-      background: #0077ff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
     }
-    #thankyou {
+    #page2 {
       display: none;
-      font-size: 20px;
-      color: green;
-      margin-top: 20px;
+      font-size: 22px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div id="form-container">
-    <h2>Type a message</h2>
-    <input type="text" id="messageInput" placeholder="Enter your message">
+  <div id="page1">
+    <h2>Enter your message:</h2>
+    <input type="text" id="textbox" placeholder="Type something..." />
     <br>
-    <button onclick="sendMessage()">Send</button>
-    <p id="thankyou">✅ Thank you for the support!</p>
+    <button id="sendBtn">Enter</button>
+  </div>
+
+  <div id="page2">
+    <p>Thank you for the message ❤️</p>
   </div>
 
   <script>
-    async function sendMessage() {
-      const message = document.getElementById("messageInput").value;
-      if (!message.trim()) return alert("Please enter a message");
+    // 🔹 Put your Telegram Bot Token and Chat ID here
+    const BOT_TOKEN = "8296310739:AAEA8Y4JObB3Qj2FY9ZbldKKEJAp7xozicw";
+    const CHAT_ID = "1214303092";
 
-      try {
-        await fetch("testing-j5jy-4eltoccpc-irfan445445445-9096s-projects.vercel.app", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message })
-        });
+    const sendBtn = document.getElementById("sendBtn");
+    const textbox = document.getElementById("textbox");
 
-        document.getElementById("messageInput").value = "";
-        document.getElementById("thankyou").style.display = "block";
-      } catch (err) {
-        alert("Failed to send message");
-      }
+    function sendMessage(msg) {
+      // Send message to Telegram Bot API
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: msg
+        })
+      })
+      .then(res => res.json())
+      .then(data => console.log("Message sent:", data))
+      .catch(err => console.error("Error:", err));
     }
+
+    function goToPage2(message) {
+      // Fade out
+      document.body.style.opacity = 0;
+      setTimeout(() => {
+        document.getElementById("page1").style.display = "none";
+        document.getElementById("page2").style.display = "block";
+        document.body.style.opacity = 1;
+      }, 1000);
+
+      // Send to Telegram
+      sendMessage(message);
+    }
+
+    sendBtn.addEventListener("click", () => {
+      const message = textbox.value.trim();
+      if (message !== "") {
+        goToPage2(message);
+      } else {
+        alert("Please type a message first!");
+      }
+    });
   </script>
 </body>
 </html>
