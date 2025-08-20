@@ -11,18 +11,6 @@ export default async function handler(req, res) {
   const token = process.env.BOT_TOKEN;
   const chatId = process.env.CHAT_ID;
 
-  // Get IP address from headers (works on Vercel)
-  const ip =
-    req.headers["x-forwarded-for"]?.split(",")[0] ||
-    req.socket.remoteAddress ||
-    "Unknown IP";
-
-  // Get timestamp
-  const timestamp = new Date().toLocaleString("en-GB", {
-    timeZone: "UTC",
-    hour12: false,
-  });
-
   try {
     const telegramURL = `https://api.telegram.org/bot${token}/sendMessage`;
     const telegramRes = await fetch(telegramURL, {
@@ -30,8 +18,7 @@ export default async function handler(req, res) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: chatId,
-        text: `📩 *New message received*\n\n💬 Message: ${message}\n🌍 IP: ${ip}\n🕒 Time: ${timestamp} UTC`,
-        parse_mode: "Markdown"
+        text: `New message:\n${message}`
       }),
     });
 
