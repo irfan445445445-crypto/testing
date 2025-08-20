@@ -2,31 +2,32 @@ export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
-  
-  const { message } = req.body;
 
+  const { message } = req.body;
   if (!message) {
-    return res.status(400).json({ error: "Message is required" });
+    return res.status(400).json({ error: "No message provided" });
   }
 
-  const BOT_TOKEN = process.env.BOT_TOKEN;
-  const CHAT_ID = process.env.CHAT_ID;
-
-  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+  const token = process.env.BOT_TOKEN;
+  const chatId = process.env.CHAT_ID;
 
   try {
-    const response = await fetch(url, {
+    const telegramURL = `https://api.telegram.org/bot${token}/sendMessage`;
+    const telegramRes = await fetch(telegramURL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: message,
+        chat_id: chatId,
+        text: `New message:\n${message}`
       }),
     });
 
-    const data = await response.json();
-    return res.status(200).json({ success: true, data });
-  } catch (error) {
-    return res.status(500).json({ error: "Failed to send message" });
+    if (!telegramRes.ok) {
+      throw new Error("Telegram API error");
+    }
+
+    res.status(200).json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 }
