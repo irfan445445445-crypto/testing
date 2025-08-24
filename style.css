@@ -5,7 +5,7 @@ body {
   padding: 0;
   text-align: center;
   font-family: "Trebuchet MS", sans-serif;
-  height: 80vh;             /* full screen height */
+  height: 60vh;             /* full screen height */
   width: 100vw;              /* full screen width */
   display: flex;
   justify-content: center;
@@ -163,3 +163,4 @@ input[type=password] {
   background: #ffcc00;
   transform: scale(1.05);
 }
+
