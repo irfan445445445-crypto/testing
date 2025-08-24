@@ -1,0 +1,162 @@
+
+
+body {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-family: "Trebuchet MS", sans-serif;
+  min-height: 200vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #fff;
+  background: linear-gradient(135deg, #2e2e2e, #bfa243);
+  background-image: url('https://i.pinimg.com/1200x/0b/da/e8/0bdae80c85ca789bf3f2313990ac595e.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  transition: all 0.5s ease-in-out;
+  font-size: 30px;
+}
+
+/* Buttons */
+button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  background: #ffd700;
+  color: #064635;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
+}
+button:hover { background: #ffda3d; }
+
+/* Headings */
+h1, h2, h3 {
+  margin: 15px 0;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+}
+
+/* Password input */
+input[type=password] {
+  padding: 12px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: 2px solid #ffd700;
+  text-align: center;
+  outline: none;
+}
+.error { color:#ffb3b3; }
+
+/* Timer text */
+#timer {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffd700;
+}
+
+/* Page handling */
+.page {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+.hidden {
+  display: none;
+}
+
+/* Fade animations */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+.fade-out {
+  opacity: 1;
+  animation: fadeOut 0.5s forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Arabic-style headings */
+.cinzel-decorative {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 48px;
+  color: #ffd700;
+  letter-spacing: 2px;
+  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Mute Button */
+.mute-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: rgba(255, 215, 0, 0.9);
+  color: #064635;
+  border: none;
+  border-radius: 50%;
+  padding: 12px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.4);
+  z-index: 1000;
+  transition: 0.3s;
+}
+.mute-btn:hover {
+  background: #ffda3d;
+}
+
+/* Beautify the final message text box */
+#finalMessage {
+  width: 110%;
+  max-width: 200px;
+  min-height: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 2px solid gold;
+  background: #1a1a1a; /* dark background */
+  color: white;
+  font-size: 16px;
+  font-family: "Trebuchet MS", sans-serif;
+  resize: none; /* disable resize handle */
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+#finalMessage:focus {
+  border-color: #ffcc00;
+  box-shadow: 0 0 10px gold;
+  background: #222;
+}
+
+/* Stack final page buttons vertically */
+#page9 button {
+  display: block;
+  width: 80%;
+  max-width: 300px;
+  margin: 12px auto;
+  padding: 12px;
+  border-radius: 10px;
+  background: gold;
+  color: #1a1a1a;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#page9 button:hover {
+  background: #ffcc00;
+  transform: scale(1.05);
+}
