@@ -247,9 +247,17 @@ function finalResponse(choice) {
 
   sendToTelegram(`Final Response (Page 9): ${messageToSend}`);
 
+  // Stop and reset the song
+  const audio = document.getElementById("nasheed");
+  audio.pause();
+  audio.currentTime = 0;
 
   // After a short delay, return to password (home) page
   setTimeout(() => {
+    // Clear password field and error message
+    document.getElementById("password").value = "";
+    document.getElementById("error").innerText = "";
+    
     showPage("page1"); 
-  }, 500); // 0.5 sec delay
+  }, 500);
 }
