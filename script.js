@@ -41,7 +41,7 @@ function checkPassword() {
   const pass = document.getElementById("password").value;
   const audio = document.getElementById("nasheed");
 
-  if (pass === "1234") {
+  if (pass === "7861") {
     audio.volume = 0.7;
     audio.play();
     showPage("page2");
@@ -261,3 +261,4 @@ function finalResponse(choice) {
     showPage("page1"); 
   }, 500);
 }
+
