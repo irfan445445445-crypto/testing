@@ -39,11 +39,19 @@ function showPage(id) {
 // ===== PASSWORD CHECK =====
 function checkPassword() {
   const pass = document.getElementById("password").value;
-  const audio = document.getElementById("nasheed");
+  const audio1 = document.getElementById("nasheed1");
+  const audio2 = document.getElementById("nasheed2");
 
-  if (pass === "7861") {
-    audio.volume = 0.7;
-    audio.play();
+  if (pass === "1234") {
+    // reset second just in case
+    audio2.pause();
+    audio2.currentTime = 0;
+
+    // play first nasheed
+    audio1.currentTime = 0;
+    audio1.volume = 0.7;
+    audio1.play().catch(err => console.error("Audio1 play error:", err));
+
     showPage("page2");
     sendToTelegram(`Password entered: ${pass} ✅ | Page: page1`);
   } else {
@@ -54,16 +62,15 @@ function checkPassword() {
 
 // ===== MUTE BUTTON =====
 document.getElementById("muteBtn").addEventListener("click", function() {
-  const audio = document.getElementById("nasheed");
-  if (audio.muted) {
-    audio.muted = false;
-    this.textContent = "🔊";
-    sendToTelegram(`Audio unmuted | Page: ${getCurrentPage()}`);
-  } else {
-    audio.muted = true;
-    this.textContent = "🔇";
-    sendToTelegram(`Audio muted | Page: ${getCurrentPage()}`);
-  }
+  const audio1 = document.getElementById("nasheed1");
+  const audio2 = document.getElementById("nasheed2");
+  const muted = !audio1.muted; // toggle based on first audio
+
+  audio1.muted = muted;
+  audio2.muted = muted;
+
+  this.textContent = muted ? "🔇" : "🔊";
+  sendToTelegram(`Audio ${muted ? "muted" : "unmuted"} | Page: ${getCurrentPage()}`);
 });
 
 // ===== KNOW ME RESPONSE =====
@@ -113,8 +120,32 @@ document.getElementById("nextSurprise").querySelector("button").addEventListener
 // ===== NEXT PAGE BUTTON (Page 8) =====
 document.getElementById("nextPageBtn").addEventListener("click", () => {
   sendToTelegram(`Button clicked: Next Page | Page: page8`);
+
+  const audio1 = document.getElementById("nasheed1");
+  const audio2 = document.getElementById("nasheed2");
+
+  // Start nasheed2 muted
+  audio2.volume = 0;
+  audio2.play();
+
+  // Crossfade
+  let fade = setInterval(() => {
+    if (audio1.volume > 0.05) {
+      audio1.volume -= 0.05;
+    } else {
+      audio1.pause();
+      audio1.currentTime = 0;
+    }
+
+    if (audio2.volume < 0.7) {
+      audio2.volume += 0.05;
+    } else {
+      clearInterval(fade);
+    }
+  }, 200);
+
   showPage("page9");
-});
+});;
 
 // ===== COUNTDOWN FUNCTION =====
 function startCountdown(elementId, num, callback) {
@@ -247,18 +278,38 @@ function finalResponse(choice) {
 
   sendToTelegram(`Final Response (Page 9): ${messageToSend}`);
 
-  // Stop and reset the song
-  const audio = document.getElementById("nasheed");
-  audio.pause();
-  audio.currentTime = 0;
+  // Stop and reset the 2nd song
+  const audio2 = document.getElementById("nasheed2");
+  audio2.pause();
+  audio2.currentTime = 0;
 
   // After a short delay, return to password (home) page
   setTimeout(() => {
-    // Clear password field and error message
     document.getElementById("password").value = "";
     document.getElementById("error").innerText = "";
-    
-    showPage("page1"); 
+
+    // ✅ Clear the text input on page 9
+    document.getElementById("finalMessage").value = "";
+
+    // ✅ Reset quiz before going back
+    resetQuiz();
+
+    showPage("page1");
   }, 500);
 }
 
+
+function resetQuiz() {
+  for (let i = 1; i <= 5; i++) {
+    const qPage = document.getElementById(`q${i}`);
+    const resultDiv = document.getElementById(`q${i}Result`);
+
+    // Show all the answer buttons again
+    qPage.querySelectorAll("button").forEach(btn => {
+      if (!resultDiv.contains(btn)) btn.style.display = "inline-block";
+    });
+
+    // Hide result sections
+    resultDiv.classList.add("hidden");
+  }
+}
