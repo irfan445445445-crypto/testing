@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Happy Birthday</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <button id="muteBtn" class="mute-btn">🔊</button>
+
+    <audio id="nasheed1" loop>
+        <source src="jamalul wujudi nasheed  jxvnav.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="nasheed2" loop>
+        <source src="The Way of The Tears (Sped Up) [vocals].mp3" type="audio/mpeg">
+    </audio>
+    
+    <div id="page1" class="page fade-in">
+        <h2 class="cinzel-decorative">🔐 Enter 4-Digit Password</h2>
+        <input type="password" id="password" maxlength="4">
+        <button onclick="checkPassword()">Enter</button>
+        <p id="error" class="error"></p>
+    </div>
+
+    <div id="page2" class="page hidden">
+        <h2 class="cinzel-decorative">🕌 Assalamualaikum Warahmatullahi Wabarakatuh</h2>
+        <button onclick="showPage('q1')">Waalaikumsalam!!!</button>
+    </div>
+
+    <div id="q1" class="page hidden">
+        <h2 class="cinzel-decorative">Question 1:</h2>
+        <h2 class="cinzel-decorative">Rasulullah Belongs To Which Banu?</h2>
+        <div class="button-group">
+            <button onclick="answerQuestion(1, 'BANU ADI')">BANU ADI</button>
+            <button onclick="answerQuestion(1, 'BANU MAKHZUM')">BANU MAKHZUM</button>
+            <button onclick="answerQuestion(1, 'BANU QURAYSH')">BANU QURAYSH</button>
+        </div>
+        <div id="q1Result" class="quiz-result-container hidden">
+            <p id="q1Answer"></p>
+            <p id="q1Correctness"></p>
+            <img id="q1Photo" src="" alt="Mini Photo" class="quiz-photo">
+            <p id="q1Message"></p>
+            <button onclick="nextQuestion(1)">Next Question</button>
+        </div>
+    </div>
+
+  <div id="q2" class="page hidden">
+    <h2 class="cinzel-decorative">Question 2:</h2>
+    <h2 class="cinzel-decorative">Who Is Khalilullah (Friend of Allah SWT)?</h2>
+    <div class="button-group">
+        <button onclick="answerQuestion(2, 'Isa AS')">Isa AS</button>
+        <button onclick="answerQuestion(2, 'Ibrahim AS')">Ibrahim AS</button>
+        <button onclick="answerQuestion(2, 'Sulaiman AS')">Sulaiman AS</button>
+    </div>
+    <div id="q2Result" class="quiz-result-container hidden">
+        <p id="q2Answer"></p>
+        <p id="q2Correctness"></p>
+        <img id="q2Photo" src="" alt="Mini Photo" class="quiz-photo">
+        <p id="q2Message"></p>
+        <button onclick="nextQuestion(2)">Next Question</button>
+    </div>
+</div>
+
+
+    <div id="q3" class="page hidden">
+        <h2 class="cinzel-decorative">Question 3:</h2>
+        <h2 class="cinzel-decorative">What Age Rasulullah Get Married?</h2>
+        <div class="button-group">
+            <button onclick="answerQuestion(3, '24')">24</button>
+            <button onclick="answerQuestion(3, '25')">25</button>
+            <button onclick="answerQuestion(3, '26')">26</button>
+        </div>
+        <div id="q3Result" class="quiz-result-container hidden">
+            <p id="q3Answer"></p>
+            <p id="q3Correctness"></p>
+            <img id="q3Photo" src="" alt="Mini Photo" class="quiz-photo">
+            <p id="q3Message"></p>
+            <button onclick="nextQuestion(3)">Next Question</button>
+        </div>
+    </div>
+
+    <div id="q4" class="page hidden">
+        <h2 class="cinzel-decorative">Question 4:</h2>
+        <h2 class="cinzel-decorative">Who Is Al Faruq</h2>
+        <div class="button-group">
+            <button onclick="answerQuestion(4, 'Umar Ibn Al Khattab')">Umar Ibn Al Khattab</button>
+            <button onclick="answerQuestion(4, 'Abu Bakr As Siddiq')">Abu Bakr As Siddiq</button>
+            <button onclick="answerQuestion(4, 'TAli Ibn Abu Thalib')">Ali Ibn Abu Thalib</button>
+        </div>
+        <div id="q4Result" class="quiz-result-container hidden">
+            <p id="q4Answer"></p>
+            <p id="q4Correctness"></p>
+            <img id="q4Photo" src="" alt="Mini Photo" class="quiz-photo">
+            <p id="q4Message"></p>
+            <button onclick="nextQuestion(4)">Next Question</button>
+        </div>
+    </div>
+
+    <div id="q5" class="page hidden">
+        <h2 class="cinzel-decorative">Question 5:</h2>
+        <h2 class="cinzel-decorative">The 2nd Women Rasulallah Get Married After Khadija RA is:</h2>
+        <div class="button-group">
+            <button onclick="answerQuestion(5, 'Zaynab RA')">Zaynab RA</button>
+            <button onclick="answerQuestion(5, 'Sawdah RA')">Sawdah RA</button>
+            <button onclick="answerQuestion(5, 'Hafsa Ra')">Hafsa Ra</button>
+        </div>
+        <div id="q5Result" class="quiz-result-container hidden">
+            <p id="q5Answer"></p>
+            <p id="q5Correctness"></p>
+            <img id="q5Photo" src="" alt="Mini Photo" class="quiz-photo">
+            <p id="q5Message"></p>
+            <button onclick="nextQuestion(5)">Next Question</button>
+        </div>
+    </div>
+
+ <div id="page3" class="page hidden">
+    <h2 class="cinzel-decorative">🤔 Do you know me?</h2>
+    <div class="button-group">
+        <button onclick="knowMe(true)">Yes</button>
+        <button onclick="knowMe(false)">No</button>
+    </div>
+    <div id="knowResult" class="hidden">
+      <img id="knowPhoto" src="" alt="Mini Photo" class="quiz-photo">
+        <p id="knowResponse"></p>
+    </div>
+    <div id="surpriseBtn" class="hidden">
+        <button onclick="showPage('page4')">🎁 Surprise</button>
+    </div>
+</div>
+
+
+
+    <div id="page4" class="page hidden">
+        <h2 class="cinzel-decorative">Do you really want to see it?</h2>
+        <div class="button-group">
+            <button onclick="wantIt(true)">Yes</button>
+            <button onclick="wantIt(false)">No</button>
+        </div>
+    </div>
+
+    <div id="page5" class="page hidden">
+        <h2 class="cinzel-decorative" id="countdown"></h2>
+    </div>
+
+    <div id="page6" class="page hidden">
+        <h1 class="cinzel-decorative">🎉 HAPPY BIRTHDAY ALIAMH 🎉</h1>
+        <div id="nextSurprise" class="hidden">
+            <button onclick="showPage('page8')">Click for Next Surprise</button>
+        </div>
+    </div>
+
+    <div id="page7" class="page hidden">
+        <h1 class="cinzel-decorative">Never mind, I will give the surprise anyway</h1>
+        <h2 id="countdown2"></h2>
+    </div>
+
+    <div id="page8" class="page hidden">
+        <h1 class="cinzel-decorative">ANA FI INTIZARAKA</h1>
+        <h1 class="cinzel-decorative">✨ ALIMAH ✨</h1>
+        <div id="timer" class="hidden"></div>
+        <h2 id="page8Countdown"></h2>
+        <button id="nextPageBtn" class="hidden" onclick="showPage('page9')">Next Page</button>
+    </div>
+
+    <div id="page9" class="page hidden">
+    <p id="surpriseText">What I want to tell you is.....</p>
+
+    <!-- Real Surprise button ABOVE text box -->
+    <div class="real-surprise">
+        <button onclick="showRealSurprise()">🎉 Real Surprise</button>
+        
+        <!-- Hidden Surprise Content -->
+        <div id="realSurpriseContent" class="hidden">
+            <img id="surprisePhoto" src="images/surprise.jpg" alt="Surprise Photo" class="surprise-photo">
+            <p id="surpriseText">This is the surprise message under the photo 🎁</p>
+        </div>
+    </div>
+
+    <!-- Text box after surprise -->
+    <textarea id="finalMessage" placeholder="Type your message..."></textarea>
+    <br>
+    <button onclick="finalResponse('Sent')">Send</button>
+</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
