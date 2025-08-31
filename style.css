@@ -4,7 +4,7 @@ body {
     padding: 0;
     text-align: center;
     font-family: 'Poppins', sans-serif;
-    height: 60vh;
+    min-height: 10vh;   /* FIX: full body height */
     width: 100vw;
     display: flex;
     justify-content: center;
@@ -19,7 +19,8 @@ body {
     transition: all 0.5s ease-in-out;
     font-size: 16px;
     line-height: 1.6;
-    overflow: hidden;
+    overflow-x: hidden;   /* only block sideways scroll */
+    overflow-y: auto;     /* allow vertical scroll */
 }
 
 body::before {
@@ -54,6 +55,7 @@ p {
     opacity: 0;
     transition: opacity 0.8s ease;
     padding: 20px;
+    padding-top: 500px;  
     max-width: 90%;
     margin: 0 auto;
     display: flex;
@@ -71,9 +73,6 @@ p {
     display: none;
 }
 
-.hidden {
-    display: none;
-}
 
 .fade-in {
     animation: fadeIn 0.8s forwards;
@@ -168,7 +167,7 @@ input[type=password]:focus {
     min-height: 120px;
     padding: 15px;
     border-radius: 15px;
-    border: 2px solid gold;
+    border: 2px solid rgb(255, 217, 0);
     background: rgba(0, 0, 0, 0.4);
     color: white;
     font-size: 16px;
@@ -237,17 +236,13 @@ input[type=password]:focus {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.hidden {
-    display: none;
-}
-
 .real-surprise {
   margin-top: 10px;
   margin-bottom: 30px;
 }
 
 .surprise-photo {
-  width: 250px;   /* 👈 change size as you like */
+  width: 250px;
   height: auto;
   border-radius: 12px;
   margin-top: 15px;
@@ -261,11 +256,113 @@ input[type=password]:focus {
 }
 
 #surpriseText {
-  margin-top: 10px;
-  font-size: 18px;
-  color: #ffd700;
-  font-style: italic;
+  margin-top: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #e0e0e0;
+  margin-bottom: 0px;
+}
+
+.real-surprise p {
+   font-size: 18px;
+}
+
+/* Page 9 container */
+#page9 {
+
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding: 20px;
+  text-align: center;
+  padding-top: 150px;
+  padding-bottom: 200px;
 }
 
 
+/* Scrollable text area */
+#page9 .scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 40px; /* space above footer */
+}
+/* Surprise text */
+#page9 p,
+#page9 .surpriseText {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 12px auto;
+  max-width: 700px;
+  text-align: center;
+}
 
+#page9 .footer {
+  padding: 20px 0 40px; /* extra space at bottom */
+  background: transparent;
+}
+
+#relationshipTimerPage9 {
+font-family: cinzel-decorative;
+  font-size: 2rem;      /* makes it bigger */
+  font-weight: bold;    /* bold text */
+  text-align: center;   /* keep centered */
+  margin: 20px 0;       /* space above and below */
+  color: #ffd700;       /* nice standout color (pink) */
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.5); /* glow effect */
+}
+
+
+/* Textarea */
+#finalMessage {
+  width: 90%;
+  max-width: 600px;
+  height: 120px;
+  margin: 20px auto;
+  display: block;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  resize: none;
+}
+
+/* Buttons */
+#page9 button {
+  margin: 10px auto;
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background: #ffda3d;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  transition: 0.3s;
+  display: block;
+  width: 100%;
+  max-width: 280px;
+}
+
+#page9 button:hover {
+  background: #45a049;
+}
+
+/* Add safe space at bottom so last button never touches screen edge */
+#page9::after {
+  content: "";
+  display: block;
+  height: 80px; /* adjustable safe space */
+}
+
+.hidden {
+    display: none;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;   /* no sideways scroll */
+  overflow-y: hidden;   /* no global scroll, except Page 9 */
+}
