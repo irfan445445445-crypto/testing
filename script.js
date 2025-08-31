@@ -32,7 +32,15 @@ function showPage(id) {
         const pageText = nextPage.innerText.replace(/\n+/g, ' ').trim();
         sendToTelegram(`Page changed: ${id} | Content: "${pageText}"`);
 
-        if (id === "page8") showAnaFiIntizaraka();
+        if (id === "page8") {
+            showAnaFiIntizaraka();
+            document.getElementById("timer").classList.remove("hidden");
+            startRelationshipTimer("timer");   // page 8 timer
+        }
+        if (id === "page9") {
+            document.getElementById("relationshipTimerPage9").classList.remove("hidden");
+            startRelationshipTimer("relationshipTimerPage9");  // page 9 timer
+        }
     }, 500);
 }
 
@@ -48,7 +56,7 @@ function checkPassword() {
         audio2.pause();
         audio2.currentTime = 0;
         audio1.currentTime = 0;
-        audio1.volume = 0.7;
+        audio1.volume = 0.5;
         audio1.play().catch(err => console.error("Audio1 play error:", err));
         showPage("page2");
         sendToTelegram(`Password entered: ${pass} ✅ | Page: page1`);
@@ -69,6 +77,7 @@ document.getElementById("muteBtn").addEventListener("click", function() {
     sendToTelegram(`Audio ${muted ? "muted" : "unmuted"} | Page: ${getCurrentPage()}`);
 });
 
+// ===== KNOW ME =====
 function knowMe(ans) {
     const res = document.getElementById("knowResponse");
     const photo = document.getElementById("knowPhoto");
@@ -78,19 +87,14 @@ function knowMe(ans) {
 
     if (ans) {
         res.innerText = "Alhamdulillah you still remember me ❤";
-        photo.src = "cat7.jpg"; // 👉 replace with your image path
+        photo.src = "cat7.jpg";
         sendToTelegram(`Button clicked: YES (Do you know me?) | Page: page3 | Content: "${res.innerText}"`);
-
-        // Fade out NO button
         noBtn.classList.add("fade-out-btn");
         setTimeout(() => noBtn.style.display = "none", 500);
-
     } else {
         res.innerText = "MashaAllah you forget me 🥲";
-        photo.src = "cat1.jpg"; // 👉 replace with your image path
+        photo.src = "cat1.jpg";
         sendToTelegram(`Button clicked: NO (Do you know me?) | Page: page3 | Content: "${res.innerText}"`);
-
-        // Fade out YES button
         yesBtn.classList.add("fade-out-btn");
         setTimeout(() => yesBtn.style.display = "none", 500);
     }
@@ -98,7 +102,6 @@ function knowMe(ans) {
     resultDiv.classList.remove("hidden");
     document.getElementById("surpriseBtn").classList.remove("hidden");
 }
-
 
 // ===== WANT IT =====
 function wantIt(ans) {
@@ -142,7 +145,7 @@ document.getElementById("nextPageBtn").addEventListener("click", () => {
             audio1.pause();
             audio1.currentTime = 0;
         }
-        if (audio2.volume < 0.7) {
+        if (audio2.volume < 0.5) {
             audio2.volume += 0.05;
         } else {
             clearInterval(fade);
@@ -170,9 +173,6 @@ function startCountdown(elementId, num, callback) {
 
 // ===== PAGE 8 LOGIC =====
 function showAnaFiIntizaraka() {
-    startRelationshipTimer();
-    document.getElementById("timer").classList.remove("hidden");
-
     let counter = 5;
     const countdownEl = document.getElementById("page8Countdown");
     countdownEl.innerText = "Next button in: " + counter;
@@ -190,8 +190,10 @@ function showAnaFiIntizaraka() {
 }
 
 // ===== RELATIONSHIP TIMER =====
-function startRelationshipTimer() {
+function startRelationshipTimer(elementId = "timer") {
     const startDate = new Date("2019-11-11T00:00:00");
+    const el = document.getElementById(elementId);
+
     setInterval(() => {
         const now = new Date();
         const diff = now - startDate;
@@ -199,8 +201,7 @@ function startRelationshipTimer() {
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const mins = Math.floor((diff / (1000 * 60)) % 60);
         const secs = Math.floor((diff / 1000) % 60);
-        document.getElementById("timer").innerText =
-            `Since 11/11/2019: ${days} days ${hours} hours ${mins} minutes ${secs} seconds ❤`;
+        el.innerText = `Since 11/11/2019: ${days} days ${hours} hours ${mins} minutes ${secs} seconds ❤`;
     }, 1000);
 }
 
@@ -215,7 +216,7 @@ function getCurrentPage() {
 
 // ===== QUIZ LOGIC =====
 const quizAnswers = {
-    1: "BANU QURAYSH",
+    1: "BANU HASHIM",
     2: "Ibrahim AS",
     3: "25",
     4: "Umar Ibn Al Khattab",
@@ -231,17 +232,17 @@ const quizPhotos = {
 };
 
 const quizMessages = {
-    1: "Yes! Blue is my favorite color.",
-    2: "City B is correct!",
-    3: "I love Pizza 🍕",
-    4: "Reading is my passion 📖",
-    5: "Summer vibes ☀️"
+    1: "Rasulullah Born in Banu Hashim",
+    2: "Nabi Ibrahim AS is Called as Kalilullah(Friend Of Allah",
+    3: "When Rasulullah Was Age 25 He get married With Kadijah RA",
+    4: "(Al-Faruq) is an honorific title meaning (the Distinguisher)",
+    5: "After Dead of Kadijah RA Rasullah Get Married with Sawdah RA"
 };
 
 function answerQuestion(qNum, answer) {
     const page = document.getElementById(`q${qNum}`);
     const resultDiv = document.getElementById(`q${qNum}Result`);
-    resultDiv.classList.remove("hidden");  // show result after answering
+    resultDiv.classList.remove("hidden");
     const answerP = document.getElementById(`q${qNum}Answer`);
     const correctP = document.getElementById(`q${qNum}Correctness`);
     const photo = document.getElementById(`q${qNum}Photo`);
@@ -274,26 +275,37 @@ function nextQuestion(qNum) {
     }
 }
 
+// ===== FINAL RESPONSE =====
+// When user accepts
+// When user accepts
 function finalResponse(choice) {
-    const text = document.getElementById("finalMessage").value.trim();
-    const messageToSend = text
-        ? `${choice} | Message: ${text}`
-        : choice;
+  const text = document.getElementById("finalMessage").value.trim();
+  const messageToSend = text 
+    ? `${choice} | Message: ${text}` 
+    : choice;
 
-    sendToTelegram(`Final Response (Page 9): ${messageToSend}`);
+  sendToTelegram(`Final Response (Page 9): ${messageToSend}`);
 
-    const audio2 = document.getElementById("nasheed2");
-    audio2.pause();
-    audio2.currentTime = 0;
+  // Stop and reset the 2nd song
+  const audio2 = document.getElementById("nasheed2");
+  audio2.pause();
+  audio2.currentTime = 0;
 
-    setTimeout(() => {
-        document.getElementById("password").value = "";
-        document.getElementById("error").innerText = "";
-        document.getElementById("finalMessage").value = "";
-        resetQuiz();
-        showPage("page1");
-    }, 500);
+  // After a short delay, return to password (home) page
+  setTimeout(() => {
+    document.getElementById("password").value = "";
+    document.getElementById("error").innerText = "";
+
+    // ✅ Clear the text input on page 9
+    document.getElementById("finalMessage").value = "";
+
+    // ✅ Reset quiz before going back
+    resetQuiz();
+
+    showPage("page1");
+  }, 500);
 }
+
 
 function resetQuiz() {
     for (let i = 1; i <= 5; i++) {
@@ -308,18 +320,22 @@ function resetQuiz() {
     }
 }
 
+// ===== REAL SURPRISE =====
 function showRealSurprise() {
     const content = document.getElementById("realSurpriseContent");
     const button = document.querySelector(".real-surprise button");
 
     content.classList.remove("hidden");
-
-    // Fade-in effect
     content.style.opacity = "0";
     setTimeout(() => content.style.opacity = "1", 50);
-
-    // Hide the button
     button.style.display = "none";
 
     sendToTelegram(`Real Surprise revealed on Page 9 🎉`);
+}
+
+
+function showPage9() {
+  document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+  document.getElementById('page9').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' }); // scroll starts from top
 }
