@@ -51,7 +51,7 @@ function checkPassword() {
     const audio1 = document.getElementById("nasheed1");
     const audio2 = document.getElementById("nasheed2");
 
-    if (pass === "1234") {
+    if (pass === "1907") {
         errorEl.innerText = "";
         audio2.pause();
         audio2.currentTime = 0;
