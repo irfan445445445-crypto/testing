@@ -21,6 +21,7 @@ body {
     line-height: 1.6;
     overflow-x: hidden;   /* only block sideways scroll */
     overflow-y: auto;     /* allow vertical scroll */
+    
 }
 
 body::before {
@@ -43,12 +44,18 @@ h1, h2 {
     margin-bottom: 20px;
 }
 
-p {
-    margin-top: 0;
-    font-size: 1.2rem;
-    color: #e0e0e0;
-    margin-bottom: 0px;
+p,
+.surpriseText,
+#page9 p,
+#page9 .surpriseText {
+  font-size: 20px !important;   /* same everywhere */
+  line-height: 1.6 !important;
+  margin: 10px auto !important;
+  color: #e0e0e0 !important;
+  text-align: center !important;
 }
+
+
 
 /* Page Containers and Animations */
 .page {
@@ -255,13 +262,18 @@ input[type=password]:focus {
   transition: opacity 0.6s ease;
 }
 
-#surpriseText {
-  margin-top: 0;
-  font-size: 16px;
-  line-height: 1.6;
-  color: #e0e0e0;
-  margin-bottom: 0px;
+p,
+.surpriseText,
+#page9 p,
+#page9 .surpriseText {
+  font-size: 30px !important;
+  line-height: 1.6 !important;
+  font-weight: normal !important;
+  margin: 12px auto !important;
+  text-align: center !important;
+  color: #e0e0e0 !important;
 }
+
 
 .real-surprise p {
    font-size: 18px;
@@ -291,7 +303,7 @@ input[type=password]:focus {
 /* Surprise text */
 #page9 p,
 #page9 .surpriseText {
-  font-size: 18px;
+  font-size: 1.2rem;   /* same as global p */
   line-height: 1.6;
   margin: 12px auto;
   max-width: 700px;
